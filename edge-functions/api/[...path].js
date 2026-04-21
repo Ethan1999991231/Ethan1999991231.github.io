@@ -9,15 +9,15 @@ const CORS_HEADERS = {
 const HOP_BY_HOP = ['host', 'connection', 'keep-alive', 'transfer-encoding', 'te', 'trailer', 'upgrade'];
 
 export async function onRequest(context) {
-  const { request } = context;
+  const { request, params } = context;
 
   if (request.method === 'OPTIONS') {
     return new Response(null, { status: 200, headers: CORS_HEADERS });
   }
 
-  const url = new URL(request.url);
-  const targetPath = url.pathname.replace(/^\/api/, '') || '/';
-  const targetURL = TARGET_BASE + targetPath + url.search;
+  const pathSegments = params.path || [];
+  const targetPath = '/' + pathSegments.join('/');
+  const targetURL = TARGET_BASE + targetPath;
 
   const fwdHeaders = new Headers();
   for (const [key, value] of request.headers.entries()) {
