@@ -1,4 +1,4 @@
-const serverNationInfoURL = 'https://api.earthmc.net/v4/nations'
+const serverNationInfoURL = '/api/nations'
 
 //查询所有国家
 function searchAll() {
