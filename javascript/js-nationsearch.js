@@ -28,7 +28,7 @@ if (cardIcon) {
 const mainArea = dom('mainArea');
 if (mainArea) mainArea.style.opacity = '0';
 
-fetch('/api/v4/nations', {
+fetch('https://api.earthmc.net/v4', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query: [nName] })
