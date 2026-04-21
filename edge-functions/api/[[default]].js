@@ -6,6 +6,8 @@ const CORS_HEADERS = {
   'Access-Control-Allow-Headers': 'Content-Type',
 };
 
+const HOP_BY_HOP = ['host', 'connection', 'keep-alive', 'transfer-encoding', 'te', 'trailer', 'upgrade'];
+
 export async function onRequest(context) {
   const { request } = context;
 
@@ -14,17 +16,25 @@ export async function onRequest(context) {
   }
 
   const url = new URL(request.url);
-  // 将 /api 前缀替换为目标地址
   const targetPath = url.pathname.replace(/^\/api/, '') || '/';
   const targetURL = TARGET_BASE + targetPath + url.search;
 
+  const fwdHeaders = new Headers();
+  for (const [key, value] of request.headers.entries()) {
+    if (!HOP_BY_HOP.includes(key.toLowerCase())) {
+      fwdHeaders.set(key, value);
+    }
+  }
+  fwdHeaders.set('Host', new URL(TARGET_BASE).host);
+
   const init = {
     method: request.method,
-    headers: request.headers,
+    headers: fwdHeaders,
   };
 
   if (request.method !== 'GET' && request.method !== 'HEAD') {
-    init.body = request.body;
+    const body = await request.text();
+    if (body) init.body = body;
   }
 
   const response = await fetch(targetURL, init);
