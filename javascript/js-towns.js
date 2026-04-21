@@ -1,4 +1,4 @@
-const serverTownInfoURL = '/api/v4/towns'
+const serverTownInfoURL = 'https://api.earthmc.net/v4'
 
 //查询所有城镇
 function searchAll() {
