@@ -22,7 +22,7 @@ if (typeof showLoading === 'function') showLoading();
 const playerCard = dom('mainArea');
 if (playerCard) playerCard.style.opacity = '0';
 
-fetch('/api/v4/players', {
+fetch('https://api.earthmc.net/v4', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query: [playerName] })
